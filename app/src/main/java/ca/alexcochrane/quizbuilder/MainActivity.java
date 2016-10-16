@@ -1,23 +1,33 @@
 package ca.alexcochrane.quizbuilder;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import ca.alexcochrane.quizbuilder.util.QuizUtilities;
 
 public class MainActivity extends AppCompatActivity {
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
+        Button play = (Button)findViewById(R.id.play);
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,QuizActivity.class);
+                try {
+                    intent.putExtras(getIntent().getExtras());
+                }
+                catch (NullPointerException e) {
+                    Log.wtf("fucking shit",e.getMessage());
+                }
+                startActivity(intent);
+            }
+        });
     }
 }

@@ -3,4 +3,10 @@
     <string name="play_game">Play!</string>
     <string name="edit_questions">Make a new question set.</string>
     <string name="exit">Quit</string>
+
+    <string name="question">Question</string>
+    <string name="A">A</string>
+    <string name="B">B</string>
+    <string name="C">C</string>
+    <string name="D">D</string>
 </resources>
