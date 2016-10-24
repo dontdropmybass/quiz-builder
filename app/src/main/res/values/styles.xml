@@ -18,4 +18,8 @@
         <item name="android:textSize">64sp</item>
     </style>
 
+    <!--<style name="quizChooserStyle" parent="Base.TextAppearance.AppCompat.Widget.TextView.SpinnerItem">-->
+        <!---->
+    <!--</style>-->
+
 </resources>

@@ -19,16 +19,10 @@
             style="@style/quizMenuButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="2"
+            android:layout_weight="5"
             android:textSize="64sp"
             android:text="@string/play_game"/>
-        <Button
-            android:id="@+id/newQuestions"
-            style="@style/quizMenuButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="@string/edit_questions"/>
+
         <Button
             android:id="@+id/quit"
             style="@style/quizMenuButtonStyle"

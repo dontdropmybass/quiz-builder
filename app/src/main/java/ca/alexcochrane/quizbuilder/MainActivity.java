@@ -16,17 +16,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button play = (Button)findViewById(R.id.play);
+        Button quit = (Button)findViewById(R.id.quit);
         play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,QuizActivity.class);
+                Intent intent = new Intent(MainActivity.this,QuizChooserActivity.class);
                 try {
                     intent.putExtras(getIntent().getExtras());
                 }
                 catch (NullPointerException e) {
-                    Log.wtf("fucking shit",e.getMessage());
+                    Log.wtf(QuizUtilities.TAG,e.getMessage());
                 }
                 startActivity(intent);
+            }
+        });
+        quit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finishAffinity();
             }
         });
     }

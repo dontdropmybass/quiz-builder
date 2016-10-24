@@ -9,4 +9,12 @@
     <string name="B">B</string>
     <string name="C">C</string>
     <string name="D">D</string>
+    <string name="score">Congratulations, %1$s!\nYou scored %2$s points on %3$s!</string>
+    <string name="return_main">Return to the Main Menu</string>
+
+    <string name="player_first_name">First Name:</string>
+
+    <string name="bad_name_title">Sorry, name not valid!</string>
+    <string name="bad_name_message">Please enter a valid first name (e.g. Bob)</string>
+    <string name="ok">OK</string>
 </resources>

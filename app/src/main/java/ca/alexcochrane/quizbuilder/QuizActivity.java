@@ -1,17 +1,16 @@
 package ca.alexcochrane.quizbuilder;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.IOException;
 import java.util.Map;
 
 import ca.alexcochrane.quizbuilder.util.QuizUtilities;
@@ -26,37 +25,41 @@ public class QuizActivity extends AppCompatActivity {
 
     int questionNum;
 
+    int score;
+
     TextView questionText;
     TextView possibleAnswers;
 
     @Override
+    @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz);
+
+        questionText = (TextView) findViewById(R.id.questionText);
+        possibleAnswers = (TextView) findViewById(R.id.possibleAnswers);
         try {
-            questions = QuizUtilities.loadSampleQuestionSet(this);
-            answers = QuizUtilities.loadSampleAnswerSet(this);
+            Map[] quiz = QuizUtilities.loadQuiz(this, getIntent().getStringExtra(QuizUtilities.QUESTION_SET));
+            questions = quiz[0];
+            answers = quiz[1];
             questionNum = 0;
             nextQuestion();
         }
-        catch (FileNotFoundException e) {
-            Log.wtf("FFFFFFFFFF",e.getCause().getMessage());
+        catch (IOException e) {
+            Log.wtf(QuizUtilities.TAG,e.getCause().getMessage());
             e.printStackTrace();
         }
     }
 
     public void nextQuestion() {
-        try {
-            getActionBar().setTitle(getString(R.string.question) + " " + questionNum);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        question = new ArrayList<>(questions.keySet()).get(0);
+        questionNum++;
+
+        question = (String) questions.keySet().toArray()[0];
         answer = (String[]) QuizUtilities.shuffleArray(questions.get(question));
 
         questionText.setText(question);
         StringBuilder sb = new StringBuilder();
+        sb.append("Question #").append(questionNum).append(":\n\n");
         sb.append("A: ").append(answer[0]).append("\n");
         sb.append("B: ").append(answer[1]).append("\n");
         sb.append("C: ").append(answer[2]).append("\n");
@@ -102,16 +105,27 @@ public class QuizActivity extends AppCompatActivity {
             default:
                 break;
         }
-        nextQuestion();
+        if (questions.size()>0) {
+            nextQuestion();
+        }
+        else {
+            Intent intent = new Intent(this,ShowScoreActivity.class);
+            intent.putExtras(getIntent());
+            intent.putExtra("SCORE",score);
+            startActivity(intent);
+        }
     }
 
     public void correct() {
+        score++;
         if (Build.VERSION.SDK_INT >= 23) {
             findViewById(R.id.activity_quiz).setBackgroundColor(getColor(R.color.correct));
         }
         else {
             findViewById(R.id.activity_quiz).setBackgroundColor(getResources().getColor(R.color.correct));
         }
+
+        animateColorWhite(R.color.correct);
     }
 
     public void incorrect() {
@@ -121,5 +135,23 @@ public class QuizActivity extends AppCompatActivity {
         else {
             findViewById(R.id.activity_quiz).setBackgroundColor(getResources().getColor(R.color.incorrect));
         }
+
+        animateColorWhite(R.color.incorrect);
+    }
+
+    public void animateColorWhite(int colorId) {
+        int colorFrom = getResources().getColor(colorId);
+        int colorTo = getResources().getColor(R.color.white);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        colorAnimation.setDuration(1000);
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                findViewById(R.id.activity_quiz).setBackgroundColor((int) animator.getAnimatedValue());
+            }
+
+        });
+        colorAnimation.start();
     }
 }
