@@ -41,4 +41,10 @@ public class ShowScoreActivity extends AppCompatActivity {
     public void returnMain(View v) {
         startActivity(new Intent(this,MainActivity.class));
     }
+
+    @Override
+    public void onBackPressed() {
+        returnMain(new View(this));
+        super.onBackPressed();
+    }
 }
